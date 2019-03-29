@@ -8,14 +8,17 @@ import Pygame
 import pygameMenu
 from pygameMenu.locals import *
 
+#variables
+#écriture du sous menu crédit
 ABOUT = ['RUNNER Z - PROJET ISN 2018/2019'.format(pygameMenu.__version__),
+         PYGAMEMENU_TEXT_NEWLINE,
          'Notre groupe: LEVENEUR Jean-Kenny, K/BIDI Maxime, HUET Kevin'.format(pygameMenu.__author__),
          PYGAMEMENU_TEXT_NEWLINE,]
 COLOR_BACKGROUND = (128, 0, 128)
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 FPS = 60.0
-MENU_BACKGROUND_COLOR = (228, 55, 36)
+MENU_BACKGROUND_COLOR = (40, 177, 160)#(228, 55, 36)
 WINDOW_SIZE = (1280, 720)
 # -----------------------------------------------------------------------------
 # Pygame initialisation
@@ -30,9 +33,8 @@ dt = 1 / FPS
 # -----------------------------------------------------------------------------
 def main_background():
     """
-    Function used by menus, draw on background while menu is active.
-    
-    :return: None
+    Fonction menu - affiche l'arrière plan (couleur) quand il est actif
+
     """
     surface.fill(COLOR_BACKGROUND)
 # -----------------------------------------------------------------------------
