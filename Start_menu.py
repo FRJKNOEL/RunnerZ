@@ -4,6 +4,7 @@ from random import randrange
 import os
 import pygame
 import Pygame
+import Pygame2
 #Importation de PygameMenu
 import pygameMenu
 from pygameMenu.locals import *
@@ -18,7 +19,7 @@ COLOR_BACKGROUND = (128, 0, 128)
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 FPS = 60.0
-MENU_BACKGROUND_COLOR = (40, 177, 160)#(228, 55, 36)
+MENU_BACKGROUND_COLOR = (40, 141, 177)
 WINDOW_SIZE = (1280, 720)
 # -----------------------------------------------------------------------------
 # Pygame initialisation
@@ -30,6 +31,27 @@ surface = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption('Runner Z')
 clock = pygame.time.Clock()
 dt = 1 / FPS
+
+NIVEAU = ['Ville']
+#------------------------------------------------------------------------------- choix du niveau / parallax ---------------------------------------
+def change_niveau(d):
+    """
+    Change le niveau du jeu.
+    """
+    print ('Niveau choisi : {0}'.format(d))
+    NIVEAU[0] = d
+
+
+def play_function(niveau, font):
+    niveau = niveau[0]
+    assert isinstance(niveau, str)
+
+    if niveau == 'Ville':
+        Pygame.gameloop()
+    elif niveau == 'Foret':
+        Pygame2.gameloop()
+    else:
+        raise Exception('Niveau inconnu : {0}'.format(niveau))
 # -----------------------------------------------------------------------------
 def main_background():
     """
@@ -38,14 +60,41 @@ def main_background():
     """
     surface.fill(COLOR_BACKGROUND)
 # -----------------------------------------------------------------------------
+# Menu - choix du niveau
+play_menu = pygameMenu.Menu(surface,
+                            bgfun=main_background,
+                            color_selected=COLOR_WHITE,
+                            font=pygameMenu.fonts.FONT_FORTNITE,
+                            font_color=COLOR_BLACK,
+                            font_size=30,
+                            menu_alpha=100,
+                            menu_color=MENU_BACKGROUND_COLOR,
+                            menu_height=int(WINDOW_SIZE[1] * 1),
+                            menu_width=int(WINDOW_SIZE[0] * 1),
+                            onclose=PYGAME_MENU_DISABLE_CLOSE,
+                            option_shadow=False,
+                            title='Choix du niveau',
+                            window_height=WINDOW_SIZE[1],
+                            window_width=WINDOW_SIZE[0]
+                            )
+# When pressing return -> play(NIVEAU[0], font)
+play_menu.add_option('Jouer', play_function, NIVEAU,
+                     pygame.font.Font(pygameMenu.fonts.FONT_FORTNITE, 30))
+play_menu.add_selector('Selectionnez le niveau', [('Ville', 'Ville'),
+                                             ('Foret', 'Foret')],
+                       
+                       onreturn=None,
+                       onchange=change_niveau)
+play_menu.add_option('Retournez au menu', PYGAME_MENU_BACK)
+
 # Menu crédit
 about_menu = pygameMenu.TextMenu(surface,
                                  bgfun=main_background,
                                  color_selected=COLOR_WHITE,
-                                 font=pygameMenu.fonts.FONT_BEBAS,
+                                 font=pygameMenu.fonts.FONT_FORTNITE,
                                  font_color=COLOR_BLACK,
                                  font_size_title=30,
-                                 font_title=pygameMenu.fonts.FONT_8BIT,
+                                 font_title=pygameMenu.fonts.FONT_FORTNITE,
                                  menu_color=MENU_BACKGROUND_COLOR,
                                  menu_color_title=COLOR_WHITE,
                                  menu_height=int(WINDOW_SIZE[1] * 1),
@@ -67,7 +116,7 @@ about_menu.add_option('Retourner au menu', PYGAME_MENU_BACK)
 main_menu = pygameMenu.Menu(surface,
                             bgfun=main_background,
                             color_selected=COLOR_WHITE,
-                            font=pygameMenu.fonts.FONT_BEBAS,
+                            font=pygameMenu.fonts.FONT_FORTNITE,
                             font_color=COLOR_BLACK,
                             font_size=30,
                             menu_alpha=100,
@@ -80,7 +129,7 @@ main_menu = pygameMenu.Menu(surface,
                             window_height=WINDOW_SIZE[1],
                             window_width=WINDOW_SIZE[0]
                             )
-main_menu.add_option('Jouer', Pygame.gameloop)
+main_menu.add_option('Jouer', play_menu)
 main_menu.add_option('Credit', about_menu)
 main_menu.add_option('Quitter', PYGAME_MENU_EXIT)
 
