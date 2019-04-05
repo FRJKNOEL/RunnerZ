@@ -1,47 +1,47 @@
-# Importation de pygame et des librairies locales
+'''Importation de pygame et des librairies locales'''
 from pygame.locals import *
 from random import randrange
 import os
 import pygame
 import Pygame
 import Pygame2
-# Importation de PygameMenu
+'''Importation de PygameMenu'''
 import pygameMenu
 from pygameMenu.locals import *
 
-#------------------------------------------------------------------------------- variables ----------------------------------------------------------
-# écriture du sous menu crédit
-ABOUT = ['RUNNER Z - PROJET ISN 2018/2019'.format(pygameMenu.__version__),
+#------------------------------------------------------------------------------- variables ---------------------------------------------------------
+'''textes du menu crédit'''
+CREDIT = ['RUNNER Z - PROJET ISN 2018/2019'.format(pygameMenu.__version__),
          PYGAMEMENU_TEXT_NEWLINE,
          'Notre groupe: '.format(pygameMenu.__author__),
          PYGAMEMENU_TEXT_NEWLINE,
-         'LEVENEUR Jean-Kenny, '.format(pygameMenu.__author__),
+         'LEVENEUR Jean-Kenny, '.format(pygameMenu.__contributors__),
          PYGAMEMENU_TEXT_NEWLINE,
-         'K/BIDI Maxime,'.format(pygameMenu.__author__),
+         'K/BIDI Maxime,'.format(pygameMenu.__contributors__),
          PYGAMEMENU_TEXT_NEWLINE,
-         'HUET Kevin'.format(pygameMenu.__author__),]
+         'HUET Kevin'.format(pygameMenu.__contributors__),]
+
 COLOR_BACKGROUND = (40, 141, 177)
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 FPS = 60.0
 MENU_BACKGROUND_COLOR = (40, 141, 177)
 WINDOW_SIZE = (1280, 720)
-# -----------------------------------------------------------------------------
-# Pygame initialisation
+#------------------------------------------------------------------------------- Pygame initialisation ---------------------------------------------
 pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
-#------------------------------------------------------------------------------- Création de la fenetre pygame et des objets ----------------------
+#---------------------------------------------------------------------- Création de la fenetre pygame et des objets --------------------------------
 surface = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption('Runner Z')
 clock = pygame.time.Clock()
 dt = 1 / FPS
 
 NIVEAU = ['Ville']
-#------------------------------------------------------------------------------- choix du niveau / parallax ---------------------------------------
+#------------------------------------------------------------------------------- choix du niveau / parallax ----------------------------------------
 def change_niveau(d):
     """
-    Change le niveau du jeu.
+    Changer le niveau du jeu.
     """
     print ('Niveau choisi : {0}'.format(d))
     NIVEAU[0] = d
@@ -57,15 +57,14 @@ def play_function(niveau, font):
         Pygame2.gameloop()
     else:
         raise Exception('Niveau inconnu : {0}'.format(niveau))
-# ------------------------------------------------------------------------------ Arrière plan du menu ----------------------------------------------
+#------------------------------------------------------------------------------- Arrière plan du menu ----------------------------------------------
 def main_background():
     """
     Fonction menu - affiche l'arrière plan (couleur) quand il est actif
-
     """
     surface.fill(COLOR_BACKGROUND)
-# -----------------------------------------------------------------------------
-# Menu - choix du niveau
+#---------------------------------------------------------------------------------------- Menu -----------------------------------------------------
+'''choix du niveau'''
 play_menu = pygameMenu.Menu(surface,
                             bgfun=main_background,
                             color_selected=COLOR_WHITE,
@@ -74,8 +73,8 @@ play_menu = pygameMenu.Menu(surface,
                             font_size=30,
                             menu_alpha=100,
                             menu_color=MENU_BACKGROUND_COLOR,
-                            menu_height=int(WINDOW_SIZE[1] * 1),
-                            menu_width=int(WINDOW_SIZE[0] * 1),
+                            menu_height=int(WINDOW_SIZE[1]),
+                            menu_width=int(WINDOW_SIZE[0]),
                             onclose=PYGAME_MENU_DISABLE_CLOSE,
                             option_shadow=False,
                             title='Choix du niveau',
@@ -90,10 +89,10 @@ play_menu.add_selector('Selectionnez le niveau', [('Ville', 'Ville'),
 
                        onreturn=None,
                        onchange=change_niveau)
-play_menu.add_option('Retournez au menu', PYGAME_MENU_BACK)
+play_menu.add_option('Retourner au menu', PYGAME_MENU_BACK)
 
-# Menu crédit
-about_menu = pygameMenu.TextMenu(surface,
+'''Menu crédit'''
+credit_menu = pygameMenu.TextMenu(surface,
                                  bgfun=main_background,
                                  color_selected=COLOR_WHITE,
                                  font=pygameMenu.fonts.FONT_FORTNITE,
@@ -102,8 +101,8 @@ about_menu = pygameMenu.TextMenu(surface,
                                  font_title=pygameMenu.fonts.FONT_FORTNITE,
                                  menu_color=MENU_BACKGROUND_COLOR,
                                  menu_color_title=COLOR_WHITE,
-                                 menu_height=int(WINDOW_SIZE[1] * 1),
-                                 menu_width=int(WINDOW_SIZE[0] * 1),
+                                 menu_height=int(WINDOW_SIZE[1]),
+                                 menu_width=int(WINDOW_SIZE[0]),
                                  onclose=PYGAME_MENU_DISABLE_CLOSE,
                                  option_shadow=False,
                                  text_color=COLOR_BLACK,
@@ -112,12 +111,12 @@ about_menu = pygameMenu.TextMenu(surface,
                                  window_height=WINDOW_SIZE[1],
                                  window_width=WINDOW_SIZE[0]
                                  )
-for m in ABOUT:
-    about_menu.add_line(m)
-about_menu.add_line(PYGAMEMENU_TEXT_NEWLINE)
-about_menu.add_option('Retourner au menu', PYGAME_MENU_BACK)
+for m in CREDIT:
+    credit_menu.add_line(m)
+credit_menu.add_line(PYGAMEMENU_TEXT_NEWLINE)
+credit_menu.add_option('Retourner au menu', PYGAME_MENU_BACK)
 
-# Menu
+'''Menu'''
 main_menu = pygameMenu.Menu(surface,
                             bgfun=main_background,
                             color_selected=COLOR_WHITE,
@@ -126,8 +125,8 @@ main_menu = pygameMenu.Menu(surface,
                             font_size=40,
                             menu_alpha=100,
                             menu_color=MENU_BACKGROUND_COLOR,
-                            menu_height=int(WINDOW_SIZE[1] * 1),
-                            menu_width=int(WINDOW_SIZE[0] * 1),
+                            menu_height=int(WINDOW_SIZE[1]),
+                            menu_width=int(WINDOW_SIZE[0]   ),
                             onclose=PYGAME_MENU_DISABLE_CLOSE,
                             option_shadow=False,
                             title='Runner Z',
@@ -135,24 +134,23 @@ main_menu = pygameMenu.Menu(surface,
                             window_width=WINDOW_SIZE[0]
                             )
 main_menu.add_option('Jouer', play_menu)
-main_menu.add_option('Credit', about_menu)
+main_menu.add_option('Credit', credit_menu)
 main_menu.add_option('Quitter', PYGAME_MENU_EXIT)
 
-# -----------------------------------------------------------------------------
-# Boucle de lancement
+# ----------------------------------------------------------------------------- Boucle de lancement ------------------------------------------------
 while True:
 
-    # Tick
+    '''Tick'''
     clock.tick(60)
 
-    # Application events
+    '''Application events'''
     events = pygame.event.get()
     for event in events:
         if event.type == QUIT:
             exit()
 
-    # Menu
+    '''Menu'''
     main_menu.mainloop(events)
 
-    # Flip surface
+    '''Flip surface'''
     pygame.display.flip()

@@ -6,12 +6,9 @@ import pygameMenu.fonts as fonts
 # Other
 __author__ = 'LEVENEUR Jean-Kenny'
 __contributors__ = [
-    'asierrayk',
-    'i96751414',
-    'ironsmile',
-    'maditnerd',
-    'Rifqi31',
-    'thisIsMikeKane',
+    'LEVENEUR Jean-Kenny',
+    'K/BIDI Maxime',
+    'HUET Kévin',
 ]
 __description__ = 'Menu pour pygame, simple'
 __email__ = 'jean.leveneur@hotmail.com'
