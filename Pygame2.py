@@ -6,17 +6,12 @@ import parallax                                                                 
 import nikita                                                                                   #importation du personnage
 
 #-------------------------------------------------------------- création de la fenetre pygame --------------------------------------------------------------------
-white = (255,255,255)
-black = (0,0,0)
-red = (255,0,0)
-green = (0,155,0)
-BLUE = (40, 120, 230)
 pygame.init()
 screen = pygame.display.set_mode((1280, 720),pygame.DOUBLEBUF)                                  #création de la fenetre pygame
 pygame.display.set_caption('PlatformZ')                                                         #titre de la fenetre pygame
 pygame.mouse.set_visible(1)                                                                     #afficher/cacher le curseur de souris (0:non visible / 1: visible)
-clock = pygame.time.Clock() 
-player = nikita.Nikita((150, 490))                                                              #position sur la fenetre pygame du personnage 
+clock = pygame.time.Clock()
+player = nikita.Nikita((150, 490))                                                              #position sur la fenetre pygame du personnage
 gameIcon = pygame.image.load('./assets/images/fond/icone.png')                                                       #création de l'icone de la fenetre pygame
 pygame.display.set_icon(gameIcon)                                                               #affiche l'icone sur la fenetre pygame
 #--------------------------------------------------------------------- Menu pause  -------------------------------------------------------------------------------
@@ -26,7 +21,7 @@ def pause():
     pause_musique = pygame.mixer.Sound("./assets/song/son.wav")
 
     while paused:
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -41,7 +36,7 @@ def pause():
                 elif event.key == pygame.K_q:                                                   #evenement clavier : appuie sur la touche "a"(q --> clavier anglais) = ferme le jeu
                     pygame.quit()
                     quit()
-        
+
         fond = pygame.image.load("./assets/images/fond/pause.png")
         screen.blit(fond, (0,0))
         pygame.display.update()
@@ -52,7 +47,7 @@ def gameloop():
     son = pygame.mixer.Sound("./assets/song/pause.wav")
     son.play()
     orientation = 'vertical'
-    bg = parallax.ParallaxSurface((1280, 720), pygame.RLEACCEL)                                 #importations des différentes images du parallax ('...png') 
+    bg = parallax.ParallaxSurface((1280, 720), pygame.RLEACCEL)                                 #importations des différentes images du parallax ('...png')
                                                                                                 #      + affectation d'une valeur pour la vitesse (', ...')
     bg.add('./assets/images/parallax/1.1.8.png', 8)
     bg.add('./assets/images/parallax/1.1.7.png', 7)
@@ -74,12 +69,8 @@ def gameloop():
                 quit()
             if event.type == KEYDOWN and event.key == K_RIGHT:
                 speed += 10
-            if event.type == KEYUP and event.key == K_RIGHT:
-                speed -= 10
             if event.type == KEYDOWN and event.key == K_LEFT:
                 speed -= 10
-            if event.type == KEYUP and event.key == K_LEFT:
-                speed += 10
             if event.type == KEYDOWN and event.key == K_DOWN:
                 orientation = 'horizontal'
             if event.type == KEYDOWN:
@@ -93,9 +84,9 @@ def gameloop():
         t = pygame.time.get_ticks()
         if (t - t_ref) > 60:
             bg.draw(screen)
-            pygame.display.flip()      
-        player.handle_event(event)                                                              #evenement du personnage  
+            pygame.display.flip()
+        player.handle_event(event)                                                              #evenement du personnage
         screen.blit(player.image, player.rect)                                                  #affiche le personnage sur la fenetre pygame
-        pygame.display.flip()              
+        pygame.display.flip()
         clock.tick(10)
     pygame.quit()
