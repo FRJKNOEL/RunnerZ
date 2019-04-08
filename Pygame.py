@@ -6,11 +6,6 @@ import parallax                                                                 
 import nikita                                                                                   #importation du personnage
 
 #-------------------------------------------------------------- création de la fenetre pygame --------------------------------------------------------------------
-#white = (255,255,255)
-#black = (0,0,0)
-#red = (255,0,0)
-#green = (0,155,0)
-#BLUE = (40, 120, 230)
 pygame.init()
 screen = pygame.display.set_mode((1280, 720),pygame.DOUBLEBUF)                                  #création de la fenetre pygame
 pygame.display.set_caption('PlatformZ')                                                         #titre de la fenetre pygame
