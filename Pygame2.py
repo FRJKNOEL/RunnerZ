@@ -1,0 +1,107 @@
+import os, sys
+import pygame
+from pygame.locals import *
+sys.path.append ("../")                                                                         #importation des différentes bibliothèques locales / fichier.py avec les différentes fonctions du jeu
+import parallax                                                                                 #importation du parallax / arrière plan mobile
+import nikita                                                                                   #importation du personnage
+
+#-------------------------------------------------------------- création de la fenetre pygame --------------------------------------------------------------------
+white = (255,255,255)
+black = (0,0,0)
+red = (255,0,0)
+green = (0,155,0)
+BLUE = (40, 120, 230)
+pygame.init()
+screen = pygame.display.set_mode((1280, 720),pygame.DOUBLEBUF)                                  #création de la fenetre pygame
+pygame.display.set_caption('Runner Z')                                                         #titre de la fenetre pygame
+pygame.mouse.set_visible(1)                                                                     #afficher/cacher le curseur de souris (0:non visible / 1: visible)
+clock = pygame.time.Clock() 
+player = nikita.Nikita((150, 645))                                                              #position sur la fenetre pygame du personnage 
+gameIcon = pygame.image.load('./assets/images/fond/logo.png')                                                       #création de l'icone de la fenetre pygame
+pygame.display.set_icon(gameIcon)                                                               #affiche l'icone sur la fenetre pygame
+#--------------------------------------------------------------------- Menu pause  -------------------------------------------------------------------------------
+def pause():
+    paused = True
+    while paused:
+        main_menu = pygameMenu.Menu(screen,
+                                    bgfun=main_background,
+                                    color_selected=white,
+                                    font=pygameMenu.fonts.FONT_FORTNITE,
+                                    font_color=black,
+                                    font_size=40,
+                                    menu_alpha=100,
+                                    menu_color=MENU_BACKGROUND_COLOR,
+                                    menu_height=int(WINDOW_SIZE[1]),
+                                    menu_width=int(WINDOW_SIZE[0]),
+                                    onclose=PYGAME_MENU_DISABLE_CLOSE,
+                                    option_shadow=False,
+                                    title='Runner Z',
+                                    window_height=WINDOW_SIZE[1],
+                                    window_width=WINDOW_SIZE[0]
+                                    )
+        main_menu.add_option('Reprendre', gameloop)
+        #main_menu.add_option('Controles', ...)
+        main_menu.add_option('Quitter', PYGAME_MENU_EXIT)
+        events = pygame.event.get()
+        for event in events:
+            if event.type == QUIT:
+                paused = False
+                exit()
+        #clock.tick(60)
+        main_menu.mainloop(events)
+        pygame.display.flip()
+        pygame.display.update()
+        clock.tick(5)
+
+#--------------------------------------------------------------------------- Jeu  ---------------------------------------------------------------------------------
+def gameloop():
+    son = pygame.mixer.Sound("./assets/song/pause.wav")
+    son.play()
+    orientation = 'horizontal'
+    bg = parallax.ParallaxSurface((1280, 720), pygame.RLEACCEL)                                 #importations des différentes images du parallax ('...png') 
+                                                                                                #      + affectation d'une valeur pour la vitesse (', ...')
+    bg.add('./assets/images/parallax/1.1.8.png', 8)
+    bg.add('./assets/images/parallax/1.1.7.png', 7)
+    bg.add('./assets/images/parallax/1.1.6.png', 6)
+    bg.add('./assets/images/parallax/1.1.5.png', 5)
+    bg.add('./assets/images/parallax/1.1.4.png', 4)
+    bg.add('./assets/images/parallax/1.1.3.png', 3)
+    bg.add('./assets/images/parallax/1.1.2.png', 2)
+    bg.add('./assets/images/parallax/1.1.1.png', 1)
+    run = True
+    speed = 0
+    t_ref = 0
+    while run:                                                                                  #définition des différentes interractions
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                run = False
+                paused = False
+                pygame.quit()
+                quit()
+            if event.type == KEYDOWN and event.key == K_RIGHT:
+                speed += 10
+            if event.type == KEYUP and event.key == K_RIGHT:
+                speed -= 10
+            if event.type == KEYDOWN and event.key == K_LEFT:
+                speed -= 10
+            if event.type == KEYUP and event.key == K_LEFT:
+                speed += 10
+            if event.type == KEYDOWN and event.key == K_DOWN:
+                orientation = 'horizontal'
+            if event.type == KEYDOWN:
+                if event.key == pygame.K_p :
+                    pygame.mixer.pause()
+                    pause_musique = pygame.mixer.Sound("./assets/song/son.wav")
+                    pause_musique.play()
+                    paused = True
+                    pause()
+        bg.scroll(speed, orientation)                                                           #mouvement du parallax
+        t = pygame.time.get_ticks()
+        if (t - t_ref) > 60:
+            bg.draw(screen)
+            pygame.display.flip()      
+        player.handle_event(event)                                                              #evenement du personnage  
+        screen.blit(player.image, player.rect)                                                  #affiche le personnage sur la fenetre pygame
+        pygame.display.flip()              
+        clock.tick(10)
+    pygame.quit()
