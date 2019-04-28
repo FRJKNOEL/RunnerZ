@@ -13,10 +13,6 @@ class Zombie(pygame.sprite.Sprite):
         self.right_states = { 0: (0, 152, 52, 76), 1: (52, 152, 52, 76), 2: (104, 152, 52, 76), 3: (156, 152, 52, 76), 4:(208, 152, 52, 76) }
         self.life = 10
 
-
-    def kill():
-        self.kill()
-
     def get_frame(self, frame_set):
         self.frame += 1
         if self.frame > (len(frame_set) - 1):
