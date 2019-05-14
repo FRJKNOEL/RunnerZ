@@ -19,7 +19,7 @@ class ParallaxSurface(object):
         self.orientation = 'horizontal'
 
     def chg_size(self, size):
-        ''' Changes the parallax surface's size. '''
+        ''' Change la taille du parallax. '''
         self.size = size
 
     def update(self, image_path, scroll_factor, size=(0, 0)):
