@@ -1,17 +1,17 @@
 import pygame
 
+#liste_personnage = ['./assets/images/personnages/nikita.png','./assets/images/personnages/fox.png','./assets/images/personnages/rita.png]
 class Nikita(pygame.sprite.Sprite):
     def __init__(self, position):
         self.sheet = pygame.image.load('./assets/images/personnages/nikita.png')
-        self.sheet.set_clip(pygame.Rect(0, 0, 52, 76))
+        self.sheet.set_clip(pygame.Rect(0, 152, 52, 76))
         self.image = self.sheet.subsurface(self.sheet.get_clip())
         self.rect = self.image.get_rect()
         self.rect.topleft = position
         self.frame = 0
         self.left_states = { 0: (0, 76, 52, 76), 1: (52, 76, 52, 76), 2: (0, 76, 52, 76), 3: (156, 76, 52, 76) }
         self.right_states = { 0: (0, 152, 52, 76), 1: (52, 152, 52, 76), 2: (0, 152, 52, 76), 3: (156, 152, 52, 76) }
-        self.up_states = { 0: (0, 228, 52, 76), 1: (52, 228, 52, 76), 2: (156, 228, 52, 76) }
-        self.down_states = { 0: (0, 0, 52, 76), 1: (52, 0, 52, 76), 2: (156, 0, 52, 76) }
+        self.life = 6
 
     def get_frame(self, frame_set):
         self.frame += 1
@@ -40,7 +40,16 @@ class Nikita(pygame.sprite.Sprite):
             self.clip(self.right_states[0])
  
         self.image = self.sheet.subsurface(self.sheet.get_clip())
- 
+
+        if self.rect.left < 0: 
+            self.rect.left = 0 
+        elif self.rect.right > 720: 
+             self.rect.right = 720 
+        elif self.rect.top < 0: 
+         self.rect.top = 0 
+        elif self.rect.bottom > 1280: 
+             self.rect.bottom = 1280
+
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             game_over = True
