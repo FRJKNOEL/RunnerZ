@@ -5,6 +5,7 @@ sys.path.append ("../")                                                         
 import parallax                                                                                 #importation du parallax / arrière plan mobile
 import nikita                                                                                   #importation du personnage
 import zombie
+import balle
 import pygameMenu
 from pygameMenu.locals import *
 #-------------------------------------------------------------- création de la fenetre pygame --------------------------------------------------------------------
@@ -23,13 +24,14 @@ pygame.mouse.set_visible(0)                                                     
 clock = pygame.time.Clock() 
 player = nikita.Nikita((150, 490))                                                              #position sur la fenetre pygame du personnage 
 zombies = []
+balles = []
 wave_zombie = 5
 wave = 1
 nbzombie_wave = 5
 for i in range(wave_zombie):
     zombies.append(zombie.Zombie((1000 + i * 100,490)))
 gameIcon = pygame.image.load('./assets/images/fond/logo1.png')                                   #création de l'icone de la fenetre pygame
-pygame.display.set_icon(gameIcon)                                                               #affiche l'icone sur la fenetre pygame
+pygame.display.set_icon(gameIcon)                                                                #affiche l'icone sur la fenetre pygame
 
 #--------------------------------------------------------------------- Menu pause  ------------------------------------------------------------------------------
 def main_background():
@@ -152,7 +154,26 @@ def waves_system(player, z):
         wave = wave + 1
         zombies.clear()
         nbzombie_wave = wave_zombie
-        pygame.time.set_timer(pygame.USEREVENT, 3000) #add
+        pygame.time.set_timer(pygame.USEREVENT, 3000)
+
+def checkCollision(b,z):
+    global wave
+    global wave_zombie
+    global nbzombie_wave
+    if (z.life > 0 for z in zombies):
+        if b.life <= 0:
+            pass
+        elif b.rect.colliderect(z.rect):
+            b.life = 0
+            z.life = 0
+            balles.remove(b)
+            nbzombie_wave = nbzombie_wave - 1
+    if all(z.life <= 0 for z in zombies):
+        wave_zombie = wave_zombie + 1
+        wave = wave + 1
+        zombies.clear()
+        nbzombie_wave = wave_zombie
+        pygame.time.set_timer(pygame.USEREVENT, 3000)
 #--------------------------------------------------------------------------- Jeu  ---------------------------------------------------------------------------------
 def gameloop():
     son = pygame.mixer.Sound("./assets/song/runnerz.wav")
@@ -190,28 +211,40 @@ def gameloop():
                 speed += 10
             if event.type == KEYDOWN and event.key == K_DOWN:
                 orientation = 'horizontal'
-            if event.type == KEYDOWN:
-                if event.key == pygame.K_p :
-                    pygame.mixer.pause()
-                    paused = True
-                    pause()
+
+            if event.type == KEYDOWN and event.key == K_SPACE:
+                balles.append(balle.Balle(((player.rect.x),(player.rect.y + 50)), 'right'))
+
             if event.type == pygame.USEREVENT:
                 for i in range(wave_zombie):
                     zombies.append(zombie.Zombie((1000 + i * 100,490)))
                     pygame.time.set_timer(pygame.USEREVENT, 0)
+
+            if event.type == KEYDOWN and event.key == K_p :
+                pygame.mixer.pause()
+                paused = True
+                pause()
                 
         bg.scroll(speed, orientation)                                                           #mouvement du parallax
         t = pygame.time.get_ticks()
         if (t - t_ref) > 60:
             bg.draw(screen)
         systeme_vie()
-        player.handle_event(event)                                                              #evenement du personnage  
-        screen.blit(player.image, player.rect)                                                  #affiche le personnage sur la fenetre pygame
+                                                         
         for z in zombies:
             if z.life > 0:
                 z.handle_event(event)
                 screen.blit(z.image,z.rect)
                 waves_system(player, z)
+            for b in balles:
+                if b.life > 0:
+                    b.handle_event(event)
+                    screen.blit(b.image, b.rect)
+                    checkCollision(b ,z)
+
+        player.handle_event(event)                                                              #evenement du personnage  
+        screen.blit(player.image, player.rect)                                                  #affiche le personnage sur la fenetre pygame
+        
         message_display('Vague : ' +str(wave) + ' Nombre de Zombies : '+str(nbzombie_wave))
         pygame.display.flip()
         clock.tick(10)

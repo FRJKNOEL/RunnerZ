@@ -12,7 +12,9 @@ class Nikita(pygame.sprite.Sprite):
         self.frame = 0
         self.left_states = { 0: (0, 76, 52, 76), 1: (52, 76, 52, 76), 2: (0, 76, 52, 76), 3: (156, 76, 52, 76) }
         self.right_states = { 0: (0, 152, 52, 76), 1: (52, 152, 52, 76), 2: (0, 152, 52, 76), 3: (156, 152, 52, 76) }
+        self.up_states = { 0: (0, 228, 52, 76), 1: (52, 228, 52, 76), 2: (156, 228, 52, 76)}
         self.life = 6
+        self.position = position
 
     def get_frame(self, frame_set):
         self.frame += 1
@@ -34,6 +36,8 @@ class Nikita(pygame.sprite.Sprite):
         if direction == 'right':
             self.clip(self.right_states)
             self.rect.x += 5
+        if direction == 'up':
+            self.clip(self.up_states)
  
         if direction == 'stand_left':
             self.clip(self.left_states[0])
@@ -45,11 +49,11 @@ class Nikita(pygame.sprite.Sprite):
         if self.rect.left < 0: 
             self.rect.left = 0 
         elif self.rect.right > 720: 
-             self.rect.right = 720 
+            self.rect.right = 720 
         elif self.rect.top < 0: 
-         self.rect.top = 0 
+            self.rect.top = 0 
         elif self.rect.bottom > 1280: 
-             self.rect.bottom = 1280
+            self.rect.bottom = 1280
 
     def handle_event(self, event):
         if event.type == pygame.QUIT:
@@ -61,10 +65,14 @@ class Nikita(pygame.sprite.Sprite):
                 self.update('left')
             if event.key == pygame.K_RIGHT:
                 self.update('right')
- 
+            if event.key == pygame.K_SPACE:
+                self.update('up')
+                    
         if event.type == pygame.KEYUP:  
  
             if event.key == pygame.K_LEFT:
                 self.update('stand_left')            
             if event.key == pygame.K_RIGHT:
+                self.update('stand_right')
+            if event.key == pygame.K_SPACE:
                 self.update('stand_right')
