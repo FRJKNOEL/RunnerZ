@@ -4,8 +4,8 @@ from random import randrange
 import os,sys
 sys.path.append ("../")
 import pygame
-import Pygame
-import Pygame2
+import level1
+import level2
 '''Importation de PygameMenu'''
 import pygameMenu
 from pygameMenu.locals import *
@@ -61,9 +61,9 @@ def play_function(niveau, font):
     assert isinstance(niveau, str)
 
     if niveau == 'Ville':
-        Pygame.gameloop()
-    elif niveau == 'Foret':
-        Pygame2.gameloop()
+        level1.gameloop()
+    elif niveau == 'Ruine':
+        level2.gameloop()
     else:
         raise Exception('Niveau inconnu : {0}'.format(niveau))
 #------------------------------------------------------------------------------- Arrière plan du menu ----------------------------------------------
@@ -93,7 +93,7 @@ play_menu = pygameMenu.Menu(surface,
 play_menu.add_option('Jouer', play_function, NIVEAU,
                      pygame.font.Font(pygameMenu.fonts.FONT_XEN_GALAXIE, 30))
 play_menu.add_selector('Selectionnez le niveau', [('Ville', 'Ville'),
-                                             ('Foret', 'Foret')],
+                                             ('Ruine', 'Ruine')],
 
                        onreturn=None,
                        onchange=change_niveau)
