@@ -145,7 +145,7 @@ def waves_system(player, z):
     if z.life <= 0:
         pass
     elif player.rect.colliderect(z.rect):
-        #player.life -= 1
+        player.life -= 1
         z.life = 0
 
 def checkCollision(b,z):
@@ -207,6 +207,8 @@ def gameloop():
 
             if event.type == KEYDOWN and event.key == K_SPACE:
                 balles.append(balle.Balle(((player.rect.x),(player.rect.y + 50)), 'right'))
+                shoot = pygame.mixer.Sound("./assets/song/shoot.wav")
+                shoot.play()
 
             if event.type == pygame.USEREVENT:
                 for i in range(wave_zombie):
